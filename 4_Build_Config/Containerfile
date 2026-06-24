@@ -1,0 +1,16 @@
+FROM registry.access.redhat.com/ubi10/ubi-minimal:latest
+
+RUN microdnf install -y httpd
+
+COPY index.html /var/www/html
+
+RUN sed -i 's/Listen 80/Listen 8080/g' /etc/httpd/conf/httpd.conf
+
+RUN chgrp -R 0 /var/run/httpd && \
+    chmod -R g=u /var/run/httpd && \
+    chgrp -R 0 /var/log/httpd && \
+    chmod -R g=u /var/log/httpd
+
+USER 1001
+
+CMD httpd -D FOREGROUND

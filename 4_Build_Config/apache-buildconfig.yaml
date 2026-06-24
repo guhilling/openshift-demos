@@ -1,0 +1,22 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: apache
+spec:
+  failedBuildsHistoryLimit: 5
+  output:
+    to:
+      kind: ImageStreamTag
+      name: apache
+  runPolicy: Serial
+  source:
+    contextDir: 4_Build_Config
+    git:
+      uri: https://github.com/guhilling/openshift-demos.git
+    type: Git
+  strategy:
+    dockerStrategy:
+      dockerfilePath: Containerfile
+    type: Docker
+  triggers:
+  - type: ConfigChange
