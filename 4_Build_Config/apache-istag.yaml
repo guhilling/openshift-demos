@@ -1,0 +1,16 @@
+apiVersion: image.openshift.io/v1
+generation: 0
+image:
+  metadata:
+    creationTimestamp: null
+kind: ImageStreamTag
+lookupPolicy:
+  local: false
+metadata:
+  name: apache:latest
+tag:
+  generation: null
+  importPolicy: {}
+  name: ""
+  referencePolicy:
+    type: ""
