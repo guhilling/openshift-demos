@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql-db
+spec:
+  selector:
+    matchLabels:
+      app: mysql-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mysql-db
+    spec:
+      containers:
+      - image: docker.io/library/mariadb:12.3.2-ubi10
+        name: mariadb
+        ports:
+          - containerPort: 3306
+            protocol: TCP
+        env:
+        - name: MARIADB_USER
+          value: dbuser
+        - name: MARIADB_ROOT_PASSWORD
+          value: dbuser
+        - name: MARIADB_PASSWORD
+          value: dbuser
+        - name: MARIADB_DATABASE
+          value: items
+        volumeMounts:
+          - name: database
+            mountPath: /var/lib/mysql
+          - name: mariadbrun
+            mountPath: /var/run/mariadb
+      volumes:
+        - name: database
+          persistentVolumeClaim:
+            claimName: mysql-data
+        - name: mariadbrun
+          emptyDir:
+            sizeLimit: 40Mi

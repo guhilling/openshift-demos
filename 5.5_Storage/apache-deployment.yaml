@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: apache
+  name: apache
+spec:
+  progressDeadlineSeconds: 30
+  replicas: 4
+  selector:
+    matchLabels:
+      app: apache
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: apache
+    spec:
+      serviceAccountName: apache
+      terminationGracePeriodSeconds: 10
+      volumes:
+        - name: www-content
+          persistentVolumeClaim:
+            claimName: apache-data
+      containers:
+      - image: quay.io/ghilling/apache-demo:1.2
+        name: apache-demo
+        resources: {}
+        volumeMounts:
+          - mountPath: /var/www/html
+            name: www-content
+        env:
+          - name: COURSE
+            value: DO288
+          - name: VERSION
+            value: "3"
+        ports:
+          - name: http
+            containerPort: 8080
