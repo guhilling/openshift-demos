@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: apache
+  name: apache
+spec:
+  containers:
+  - image: quay.io/ghilling/apache-demo/1.2
+    name: apache
+    ports:
+    - name: http
+      containerPort: 8080
+
