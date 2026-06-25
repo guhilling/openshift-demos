@@ -1,0 +1,16 @@
+resources:
+  - ../../base/
+
+namespace: apache-test
+
+commonAnnotations:
+  maintainer: Gunnar
+
+labels:
+  - pairs:
+      project: demo
+    includeSelectors: true
+    includeTemplates: true
+
+patches:
+  - path: apache-deployment-patch.yaml

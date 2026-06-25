@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: apache
+  name: apache
+spec:
+  progressDeadlineSeconds: 25
+  replicas: 3
+  selector:
+    matchLabels:
+      app: apache
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: apache
+    spec:
+      serviceAccountName: apache
+      terminationGracePeriodSeconds: 10
+      volumes:
+        - name: www-content
+          configMap:
+            name: apache-content
+            defaultMode: 0444
+      containers:
+      - image: quay.io/ghilling/apache-demo:1.2
+        name: apache-demo
+        startupProbe:
+          httpGet:
+            path: /index.html
+            port: 8080
+          periodSeconds: 2
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 20
+        readinessProbe:
+          httpGet:
+            path: /index.html
+            port: 8080
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 1
+        livenessProbe:
+          httpGet:
+            path: /index.html
+            port: 8080
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 6
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 100m
+          limits:
+            memory: 256Mi
+            cpu: 100m
+        volumeMounts:
+          - mountPath: /var/www/html
+            name: www-content
+        envFrom:
+          - secretRef:
+              name: apache-credentials
+        env:
+          - name: COURSE
+            value: DO288
+          - name: VERSION
+            value: "3"
+        ports:
+          - name: http
+            containerPort: 8080

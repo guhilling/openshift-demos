@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apache
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+      - name: apache-demo
+        resources:
+          requests:
+            memory: 128Mi
+          limits:
+            memory: 192Mi

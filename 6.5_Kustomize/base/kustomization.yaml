@@ -1,0 +1,11 @@
+resources:
+  - apache-credentials-secret.yaml
+  - apache-deployment.yaml
+  - apache-route.yaml
+  - apache-service.yaml
+  - apache-sa.yaml
+
+configMapGenerator:
+  - name: apache-content
+    files:
+      - index.html

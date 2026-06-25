@@ -1,0 +1,14 @@
+resources:
+  - ../../base/
+
+commonAnnotations:
+  maintainer: Prod-Team
+
+labels:
+  - pairs:
+      project: production
+    includeSelectors: false
+    includeTemplates: true
+
+patches:
+  - path: apache-deployment-patch.yaml
